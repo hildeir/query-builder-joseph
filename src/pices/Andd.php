@@ -14,7 +14,7 @@ class Andd{
 		$this->operador = $operador;
 	}
 	public function addClause($clause){
-		$setEspaco = sprintf("%s",$clause);
+		$setEspaco = " ". $clause . " "; 
 		$this->clause = $setEspaco;
 	}
 	public function getValue(){

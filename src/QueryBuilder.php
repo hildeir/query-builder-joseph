@@ -422,6 +422,8 @@ class QueryBuilder extends Database{
 			
 		}else{
 			//quando há clauses
+			$arrayBindValue = [];
+			$storeClauses = "";
 			foreach($clause as $obj){
 				
 				//variavel $sintaxe, exemplo: column = :column
@@ -439,17 +441,17 @@ class QueryBuilder extends Database{
 				$clauses .= $column;
 				$clauses .= $obj->getOperador();
 				$clauses .= $bindValue;
-				
-				$sql = "select $select from $tabela $clauses";
-				
-				$pdo = self::pdo();
-				$query = $pdo->prepare($sql);
-				$query->bindValue($bindValue,$values["value"]);
-				$query->execute();				
-				$res = $query->fetchAll();
-
-				return $res;
+				$arrayBindValue[$bindValue] = $values["value"];
+				$storeClauses .= $clauses;
 			}
+			$sql = "select $select from $tabela $storeClauses";
+				
+			$pdo = self::pdo();
+			$query = $pdo->prepare($sql);
+			$query->execute($arrayBindValue);				
+			$res = $query->fetchAll();
+
+			return $res;
 			
 		}
 	
